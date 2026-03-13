@@ -30,7 +30,7 @@ If the detection panel shows: Clue window: not found. You may need to **slightly
 
 # 3. Scanning Tetras
 
-![Tetra Scanner Demo](images/scan tetra.gif)
+![Tetra Scanner Demo](images/scantetra.gif)
 
 Scan tetras **in order**. The tooltip helps track your progress while scanning.
 Example: Scanned: 30 | (inv 2)
