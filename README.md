@@ -7,7 +7,6 @@ Instead of solving each compass individually, this tool:
 2. Stores the **arrow angle**
 3. Groups identical angles
 4. Highlights matching compasses in your bank for **fast solving**
-5. 
 ---
 
 # Requirements
@@ -31,7 +30,7 @@ If the detection panel shows: Clue window: not found. You may need to **slightly
 
 # 3. Scanning Tetras
 
-<video src="images/2026-03-13 22-53-52.mp4" controls width="700"></video>
+![Tetra Scanner Demo](images/scan tetra.gif)
 
 Scan tetras **in order**. The tooltip helps track your progress while scanning.
 Example: Scanned: 30 | (inv 2)
@@ -57,7 +56,7 @@ The plugin stores angles sequentially and assumes the **same order as your bank 
 
 # 4. Bank Overlay
 
-<video src="images/2026-03-13 22-55-29.mp4" controls width="700"></video>
+![Tetra Scanner Demo](images/overlay.gif)
 
 The **Show bank overlay** button highlights which tetras belong to which angle group.
 You can:
