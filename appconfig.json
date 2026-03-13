@@ -1,0 +1,12 @@
+{
+    "appName": "Tetracompass helper",
+    "description": "Scan, group, and highlight Tetra Compass angles for faster solving.",
+    "appUrl": "./index.html",
+    "configUrl": "./appconfig.json",
+    "iconUrl": "./images/icon.png",
+    "defaultWidth": 560,
+    "defaultHeight": 1010,
+    "requestHandlers": [],
+    "activators": [],
+    "permissions": "pixel,gamestate,overlay"
+}
