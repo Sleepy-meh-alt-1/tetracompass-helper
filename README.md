@@ -71,3 +71,19 @@ To avoid this:
 - Hide **bank header icons**
 - Avoid **inventory or other UI overlapping the bank**
 Then run **Show bank overlay**, collect the matching tetras, solve them, and repeat.
+
+# Installation
+
+Alt1 Installation link:
+alt1://addapp/https://sleepy-meh-alt-1.github.io/tetracompass-helper/appconfig.json
+
+---
+
+# ⚠️ Disclaimer
+
+This tool was built purely for **fun and personal use**.
+
+- There is **no guarantee of accuracy**
+- If something breaks, there is **no guarantee it will be fixed**, though I may try if I have time
+
+Use at **your own risk**.
