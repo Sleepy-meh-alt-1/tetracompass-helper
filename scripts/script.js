@@ -1,5 +1,16 @@
 A1lib.identifyApp("appconfig.json");
 
+let reader = new Chatbox.default();
+const appColor = A1lib.mixColor(255, 199, 0);
+const timestampRegex = /\[\d{2}:\d{2}:\d{2}\]/g;
+let chatInterval = null;
+
+
+const rewardChestAnchor = {
+  width: 9,
+  height: 10,
+  data: "XHSR/1xzkf8nucf/J7nI/ye4x/8nuMf/WXCN/1lwjP9Xb4v/UGV//1Blf/8nuMf/MN3v/y3L3P8QiJP/J7jH/1pykP9aco//UGV//yq5yP8y7P//Uf///xdeZf8nusn/J7jH/111kv9cdJL/UWWA/zz///8y7v//SfH//zDg8P8nvMr/KrrI/1Blf/9QZX//AH+J/1T///8nuMf/QNPi/0f///8Qi5b/J7fF/1Flf/9QZX//MNvs/yCUoP8w2+z/KrvK/ye4x/8+7///AH+J/1FlgP9RZYD/AH6I/ye8y/8Xa3T/HIaR/xyCjP8+////MNvs/zDb7P8w2+z/XnaV/yrB0P8qwtH/AABJ/yq+zf8qv87/NfL//zXy//8w2+z/XnaV/yq+zf8qwdD/AABJ/yq+zf8qv87/XnaV/152lf9edpX/XnaV/152lf8qwdD/AABJ/yrAzv8qv87/XnaV/152lf9edpX/"
+};
 
 let clueNAnchorStr = "VoeY/1eKnP9ai57/XJCk/wAZM/8AGTP/ABkz/wAAAP9hl63/YZet/wAZM/8AGTP/ABkz/wAZM/8AGTP/ABkz/2GXrf9ek6n/ABkz/wAZM/8AAAD/V4ib/1eHmv9Wh5n/VoaY/1yPov9cj6L/XJCk/12RpP8AGTP/ABkz/wAZM/8AAAD/Ypiv/2KYr/9imK//ABkz/wAZM/8AGTP/ABkz/wAZM/8AGTP/ZJyy/wAZM/8AGTP/AAAA/2KXrv9ek6n/XpKn/1qOov9ckKT/XJCk/1yQpP9dkaX/ABkz/wAZM/8AGTP/AAAA/2SZsP9imbD/Ypmw/2KZsP8AGTP/ABkz/wAZM/8AGTP/ABkz/wAZM/8AGTP/ABkz/wAAAP9imbD/Ypeu/2GXrf9hlqz/XZGk/12RpP9dkaX/XZGl/wAZM/8AGTP/ABkz/wAAAP9lnLL/ZZyy/2Scsv9knLL/ZZyy/wAZM/8AGTP/ABkz/wAZM/8AGTP/ABkz/wAZM/8AAAD/Ypqw/2KYr/9hl63/YZas/12Rpv9dkab/XZGm/12Rpv8AGTP/ABkz/wAZM/8AAAD/ZJyy/2Sbsv9knLL/ZJuy/2Sbsv9km7L/ABkz/wAZM/8AGTP/ABkz/wAZM/8AGTP/AAAA/2Sbsv9kmrD/Ypiv/2GXrf9ekqf/XpKn/16Sp/9ek6f/ABkz/wAZM/8AGTP/AAAA/2Wcs/9lnLP/ZZy0/2WctP9lnLT/ZZy0/2WctP8AGTP/ABkz/wAZM/8AGTP/ABkz/wAAAP9lnLP/ZJuy/2KZsP9il67/XpOo/16UqP9elKj/XpSo/wAZM/8AGTP/ABkz/wAAAP9lnLP/ZZy0/2adtf9mnrX/Zp61/2aetf9mnrX/Zp21/wAZM/8AGTP/ABkz/wAZM/8AAAD/ZZ21/2Wcs/9kmrH/Ypiv/16UqP9elan/ABkz/wAZM/8AGTP/ABkz/wAZM/8AGTP/ABkz/2aetf9nn7f/Z6G4/2igt/9noLf/Z6C3/2aftv9mnbX/ABkz/wAZM/8AGTP/AAAA/2adtf9lnLT/ZJqy/2KYr/9glar/YJaq/wAZM/8AGTP/ABkz/wAZM/8AGTP/ABkz/wAZM/8AAAD/aKC3/3CtyP9ln7b/Zp62/2aet/9mnbX/ZZy1/2Wcsv8AGTP/ABkz/wAAAP9mnrb/Zp21/2Wcsv9kmrD/YJWq/2CWqv9glqr/AAAA/wAAAP8AAAD/AAAA/wAAAP8AAAD/AAAA/3Ctxv9JcYL/XpGn/2iguf9mnrf/Zp61/2Wdtf9lnLP/ZJyy/wAAAP8AAAD/Zp21/2adtf9lnLP/ZJqy/2CVqv9glqr/YJaq/2CWqv9glqr/YJaq/2KYrv9lnLL/ZZyz/2KYrv9YiZ3/TnmM/013if9Md4n/Zpy1/2ifuP9lnLT/ZZyz/2Scsv9lnLP/ZZy0/2Wctf9lnLT/ZZyz/2Wcsv8="
 let clueNAnchorWidth = 25
@@ -25,6 +36,7 @@ const CONFIG = {
   dedupeDistance: 20,
   rowTolerance: 12,
   groupColorCount: 71,
+  
 };
 
 const ARROW_REGION = {
@@ -56,6 +68,12 @@ const state = {
   lastAutoSavedAngle: null,
   tooltipEnabled: true,
   angleGroupSortMode: "default", // "default" | "count-desc" | "angle-asc"
+  timerRunning: false,
+  timerStart: null,
+  timerElapsed: 0,
+  rewardChestCount: 0,
+  solvedChests: 0,
+
 };
 
 const GROUP_COLORS = generateDistinctColors(CONFIG.groupColorCount);
@@ -103,6 +121,482 @@ function getBankTetraBoxFromMatch(match) {
     w: BANK_BOX.width,
     h: BANK_BOX.height,
   };
+}
+
+function formatTime(ms) {
+  const totalSeconds = Math.floor(ms / 1000);
+  const h = String(Math.floor(totalSeconds / 3600)).padStart(2, "0");
+  const m = String(Math.floor((totalSeconds % 3600) / 60)).padStart(2, "0");
+  const s = String(totalSeconds % 60).padStart(2, "0");
+  return `${h}:${m}:${s}`;
+}
+
+function updateTimerUI() {
+  const now = Date.now();
+
+  let elapsed = state.timerElapsed;
+  if (state.timerRunning && state.timerStart) {
+    elapsed += now - state.timerStart;
+  }
+
+  // Update time display
+  setText("timerDisplay", formatTime(elapsed));
+
+  // Calculate pace
+
+  const hours = elapsed / 1000 / 3600;
+
+
+  let pace = 0;
+  if (hours > 0) {
+    pace = state.solvedChests / hours;
+  }
+
+  setText(
+    "paceDisplay",
+    `${pace.toFixed(1)} tetras/h | ${state.solvedChests} chests`
+  );
+}
+
+function detectRewardChests(bind) {
+  try {
+    const raw = alt1.bindFindSubImg(
+      bind,
+      rewardChestAnchor.data,
+      rewardChestAnchor.width,
+      0,
+      0,
+      alt1.rsWidth,
+      alt1.rsHeight
+    );
+
+    const matches = JSON.parse(raw || "[]");
+
+    console.log(matches)
+    return matches.length;
+  } catch (e) {
+    console.error("detectRewardChests error:", e);
+    return 0;
+  }
+}
+
+
+function addSolvedChest() {
+  state.solvedChests++;
+  updateSolvedUI();
+}
+
+function updateSolvedUI() {
+  setText("solvedCount", state.solvedChests);
+}
+
+const addSolveBtn = $("addSolveBtn");
+
+if (addSolveBtn) {
+  addSolveBtn.addEventListener("click", addSolvedChest);
+}
+function getChestTextRegion(match) {
+  return {
+    x: match.x + 10,   // tweak this
+    y: match.y + 12,   // tweak this
+    w: 20,
+    h: 14,
+  };
+}
+
+function readChestCount(bind, match) {
+  try {
+    const rect = getChestTextRegion(match);
+
+    const imgRaw = alt1.bindGetRegion(bind, rect.x, rect.y, rect.w, rect.h);
+    if (!imgRaw) return 0;
+
+    const img = decodeImage(imgRaw, rect.w, rect.h);
+
+    // Use OCR
+    const result = OCR.readSmallText(img);
+
+    if (!result || !result.text) return 0;
+
+    // Extract number only
+    const num = parseInt(result.text.replace(/\D/g, ""), 10);
+
+    return isNaN(num) ? 0 : num;
+  } catch (e) {
+    console.error("readChestCount error:", e);
+    return 0;
+  }
+}
+
+function detectRewardChestsWithCounts(bind) {
+  const raw = alt1.bindFindSubImg(
+    bind,
+    rewardChestAnchor.data,
+    rewardChestAnchor.width,
+    0,
+    0,
+    alt1.rsWidth,
+    alt1.rsHeight
+  );
+
+  const matches = parseFindSubImgMatches(raw);
+
+  return total;
+}
+
+function toBinary(img) {
+  const { width, height, data } = img;
+  const out = new Uint8Array(width * height);
+
+  for (let i = 0; i < width * height; i++) {
+    const j = i * 4;
+    const r = data[j];
+    const g = data[j + 1];
+    const b = data[j + 2];
+
+    const brightness = (r + g + b) / 3;
+
+    // RS numbers are bright → threshold
+    out[i] = brightness > 160 ? 1 : 0;
+  }
+
+  return { data: out, width, height };
+}
+
+function segmentDigits(bin) {
+  const { data, width, height } = bin;
+  const columns = new Array(width).fill(0);
+
+  // Count pixels per column
+  for (let x = 0; x < width; x++) {
+    for (let y = 0; y < height; y++) {
+      if (data[y * width + x]) columns[x]++;
+    }
+  }
+
+  const digits = [];
+  let inDigit = false;
+  let start = 0;
+
+  for (let x = 0; x < width; x++) {
+    if (!inDigit && columns[x] > 0) {
+      inDigit = true;
+      start = x;
+    } else if (inDigit && columns[x] === 0) {
+      digits.push({ x1: start, x2: x });
+      inDigit = false;
+    }
+  }
+
+  if (inDigit) digits.push({ x1: start, x2: width });
+
+  return digits;
+}
+
+const DIGIT_TEMPLATES = {
+  "1": [
+    "010",
+    "110",
+    "010",
+    "010",
+    "111",
+  ],
+  "2": [
+    "111",
+    "001",
+    "111",
+    "100",
+    "111",
+  ],
+  // add more...
+};
+
+
+function matchDigit(bin, digitBox) {
+  const { data, width, height } = bin;
+  const w = digitBox.x2 - digitBox.x1;
+
+  // Normalize to template size (3x5)
+  const scaled = [];
+
+  for (let ty = 0; ty < 5; ty++) {
+    let row = "";
+    for (let tx = 0; tx < 3; tx++) {
+      let count = 0;
+
+      for (let y = 0; y < height; y++) {
+        const x = digitBox.x1 + Math.floor((tx / 3) * w);
+        if (data[y * width + x]) count++;
+      }
+
+      row += count > height * 0.3 ? "1" : "0";
+    }
+    scaled.push(row);
+  }
+
+  // Compare to templates
+  let best = null;
+  let bestScore = Infinity;
+
+  for (const [digit, template] of Object.entries(DIGIT_TEMPLATES)) {
+    let diff = 0;
+
+    for (let y = 0; y < 5; y++) {
+      for (let x = 0; x < 3; x++) {
+        if (template[y][x] !== scaled[y][x]) diff++;
+      }
+    }
+
+    if (diff < bestScore) {
+      bestScore = diff;
+      best = digit;
+    }
+  }
+
+  return best;
+}
+
+
+// =========================
+// Stack Reader (Pixel-based)
+// =========================
+
+// --- CONFIG ---
+const STACK_REGION = {
+  offsetX: 13,
+  offsetY: 13,
+  width: 32,
+  height: 10,
+};
+
+// --- COLOR DETECTION (tolerant yellow) ---
+function isStackPixel(r, g, b) {
+  return r === 255 && g === 255 && b === 0;
+}
+
+// --- CAPTURE STACK REGION ---
+function captureStackRegion(bind, slot) {
+  const x = slot.x + STACK_REGION.offsetX;
+  const y = slot.y + STACK_REGION.offsetY;
+
+
+  const raw = alt1.bindGetRegion(bind, x, y, STACK_REGION.width, STACK_REGION.height);
+
+    alt1.overLayRect(
+    0xFFFF00FF,
+    x,
+    y,
+    STACK_REGION.width,
+    STACK_REGION.height,
+    1000,
+    1
+  );
+
+  if (!raw) return null;
+
+  return decodeImage(raw, STACK_REGION.width, STACK_REGION.height);
+}
+
+// --- DIGIT CLASSIFIER (your logic, improved) ---
+function classifyDigit(pixelCount, longestStreak) {
+  if (pixelCount === 14) return "0";
+
+  if (pixelCount === 11) {
+    return longestStreak <= 3 ? "7" : "1";
+  }
+
+  if (pixelCount === 13) {
+    return longestStreak === 3 ? "3" : "4";
+  }
+
+  if (pixelCount === 15) {
+    if (longestStreak === 2) return "2";
+    if (longestStreak === 4) return "5";
+    if (longestStreak >= 7) return "9";
+  }
+
+  if (pixelCount === 18) return "6";
+  if (pixelCount >= 19) return "8";
+
+  return "";
+}
+
+// --- MAIN READER ---
+function readStackFromImage(img) {
+  if (!img) return 0;
+
+  const { width: w, height: h, data } = img;
+
+  let digits = "";
+  let emptyCols = 0;
+
+  let inDigit = false;
+  let accCount = 0;
+  let accMaxStreak = 0;
+
+  for (let x = 0; x < w; x++) {
+    let colCount = 0;
+    let colMaxStreak = 0;
+    let streak = 0;
+
+    for (let y = 0; y < h; y++) {
+      const i = (y * w + x) * 4;
+      const r = data[i];
+      const g = data[i + 1];
+      const b = data[i + 2];
+
+      if (isStackPixel(r, g, b)) {
+        colCount++;
+        streak++;
+        if (streak > colMaxStreak) colMaxStreak = streak;
+      } else {
+        streak = 0;
+      }
+    }
+
+    // --- EMPTY COLUMN ---
+    if (colCount === 0) {
+      if (inDigit) {
+        const d = classifyDigit(accCount, accMaxStreak);
+        if (d) digits += d;
+
+        // reset digit accumulators
+        inDigit = false;
+        accCount = 0;
+        accMaxStreak = 0;
+      }
+
+      emptyCols++;
+      if (emptyCols >= 4) break; // safer stop
+      continue;
+    }
+
+    // --- NON-EMPTY COLUMN ---
+    emptyCols = 0;
+    inDigit = true;
+
+    accCount += colCount;
+    if (colMaxStreak > accMaxStreak) {
+      accMaxStreak = colMaxStreak;
+    }
+  }
+
+  // flush last digit if needed
+  if (inDigit) {captureStackRegion
+    const d = classifyDigit(accCount, accMaxStreak);
+    if (d) digits += d;
+  }
+
+  // fallback: no digits = single item
+  if (!digits) return 1;
+
+  return parseInt(digits, 10);
+}
+
+// --- HIGH LEVEL HELPER ---
+function readStackFromSlot(bind, slot) {
+  const img = captureStackRegion(bind, slot);
+  return readStackFromImage(img);
+}
+
+
+// -------------------------
+// Alt1 chatbox setup
+// -------------------------
+window.setTimeout(() => {
+    reader.readargs = {
+        colors: [
+            A1lib.mixColor(255, 255, 255),
+            A1lib.mixColor(0, 255, 0),
+            A1lib.mixColor(30, 255, 0),
+            A1lib.mixColor(30, 255, 0)
+        ],
+        backwards: true,
+    };
+
+    reader.find();
+
+    const findChat = setInterval(() => {
+        if (reader.pos === null) reader.find();
+        else {
+            clearInterval(findChat);
+            reader.pos.mainbox = reader.pos.boxes[0];
+            showSelectedChat(reader.pos);
+
+            chatInterval = setInterval(() => {
+                readChatbox();
+            }, 200);
+        }
+    }, 1000);
+}, 0);
+
+function showSelectedChat(chat) {
+    try {
+        alt1.overLayRect(
+            appColor,
+            chat.mainbox.rect.x,
+            chat.mainbox.rect.y,
+            chat.mainbox.rect.width,
+            chat.mainbox.rect.height,
+            2000,
+            5
+        );
+    } catch {}
+}
+
+// -------------------------
+// Chatbox parsing
+// -------------------------
+function readChatbox() {
+    const opts = reader.read() || [];
+    let chatStr = "";
+    let chatArr;
+
+    if (opts.length) {
+        for (let line in opts) {
+            if (!opts[line].text.match(timestampRegex) && line == "0") continue;
+            if (opts[line].text.match(timestampRegex)) {
+                if (line > 0) chatStr += "\n";
+                chatStr += opts[line].text + " ";
+                continue;
+            }
+            chatStr += opts[line].text;
+        }
+    }
+
+    if (chatStr.trim()) chatArr = chatStr.trim().split("\n");
+
+    if (chatArr) {
+        for (let line of chatArr) {
+            const chatLine = line.trim();
+            if (chatLine && !isInHistory(chatLine)) {
+                checkLine(chatLine);
+            }
+        }
+        updateChatHistory(chatArr);
+    }
+}
+
+function isInHistory(chatLine) {
+    if (!sessionStorage.chatHistory) return false;
+    return sessionStorage.chatHistory.split("\n").includes(chatLine);
+}
+
+function updateChatHistory(chatArr) {
+    if (!sessionStorage.chatHistory) {
+        sessionStorage.chatHistory = chatArr.join("\n");
+        return;
+    }
+    let history = sessionStorage.chatHistory.split("\n");
+    while (history.length > 100) history.shift();
+    chatArr.forEach(line => history.push(line.trim()));
+    sessionStorage.chatHistory = history.join("\n");
+}
+
+function checkLine(line) {
+
+  console.log(line)
+
 }
 
 // =========================
@@ -174,6 +668,7 @@ function detectClueWindowOnce(bind) {
       alt1.rsWidth,
       alt1.rsHeight
     );
+
 
     const matches = JSON.parse(raw || "[]");
     const first = matches[0];
@@ -855,6 +1350,7 @@ function loop() {
     clearScanTooltip();
   }
 
+  updateTimerUI();
   scheduleNextLoop();
 }
 
@@ -863,6 +1359,28 @@ function startClueDetectionLoop() {
   state.loopRunning = true;
   loop();
 }
+
+  function startTimer() {
+    if (state.timerRunning) return;
+    state.timerRunning = true;
+    state.timerStart = Date.now();
+  }
+
+  function stopTimer() {
+    if (!state.timerRunning) return;
+    state.timerElapsed += Date.now() - state.timerStart;
+    state.timerRunning = false;
+    state.timerStart = null;
+  }
+
+  function resetTimer() {
+    state.timerRunning = false;
+    state.timerStart = null;
+    state.timerElapsed = 0;
+    state.solvedChests = 0;
+
+    updateTimerUI();
+  }
 
 // =========================
 // Init
@@ -877,11 +1395,18 @@ function bindControls() {
   const autoSaveToggle = $("autoSaveToggle");
   const tooltipToggle = $("tooltipToggle");
   const angleGroupSortSelect = $("angleGroupSortSelect");
+  const startBtn = $("startTimerBtn");
+  const stopBtn = $("stopTimerBtn");
+  const resetBtn = $("resetTimerBtn");
 
+  if (startBtn) startBtn.addEventListener("click", startTimer);
+  if (stopBtn) stopBtn.addEventListener("click", stopTimer);
+  if (resetBtn) resetBtn.addEventListener("click", resetTimer);
   if (saveBtn) saveBtn.addEventListener("click", saveCurrentTetra);
   if (undoBtn) undoBtn.addEventListener("click", undoLastTetra);
   if (clearBtn) clearBtn.addEventListener("click", clearAllTetras);
   if (showBankOverlayBtn) showBankOverlayBtn.addEventListener("click", showBankOverlayOnce);
+
 
   if (showAllBtn) {
     showAllBtn.addEventListener("click", () => {

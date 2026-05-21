@@ -109,7 +109,7 @@ html, body {
 
 #topRow {
   display: grid;
-  grid-template-columns: auto 1fr;
+  grid-template-columns: auto 1fr auto;
   gap: 12px;
   align-items: start;
 }
@@ -272,6 +272,28 @@ input[type="checkbox"] {
           <div><span id="darkPixels">-</span></div>
         </div>
       </div>
+      <div class="panel">
+  <div class="panel-header">Session Timer</div>
+
+  <div class="info-grid">
+      <div class="controls-row">
+    <button id="startTimerBtn">Start</button>
+    <button id="stopTimerBtn">Stop</button>
+    <button id="resetTimerBtn">Reset</button>
+      <button id="addSolveBtn">+1 Solve</button>
+  </div>
+
+    <div class="label">Elapsed time</div>
+    <div><span id="timerDisplay">00:00:00</span></div>
+
+    <div class="label">Current pace</div>
+    <div><span id="paceDisplay">0.0 tetras/h</span></div>
+  </div>
+<br>
+<br>
+
+</div>
+
     </div>
 
     <div class="panel">
@@ -358,6 +380,4 @@ input[type="checkbox"] {
 
   <script src="scripts/script.js"></script>
 </body>
-
-  <script src="scripts/script.js"></script>
 </html>
